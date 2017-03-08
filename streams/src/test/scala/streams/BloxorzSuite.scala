@@ -40,6 +40,9 @@ class BloxorzSuite extends FunSuite {
       |------ooo-""".stripMargin
 
     val optsolution = List(Right, Right, Down, Right, Right, Right, Down)
+
+    val standingBlock = Block(Pos(1, 3), Pos(1, 3))
+    val lyingBlock = Block(Pos(1, 3), Pos(1, 4))
   }
 
 
@@ -64,6 +67,17 @@ class BloxorzSuite extends FunSuite {
     }
   }
 
+  test("isStanding: when block stands") {
+    new Level1 {
+      assert(standingBlock.isStanding)
+    }
+  }
+
+  test("isStanding: when block lies down") {
+    new Level1 {
+      assert(!lyingBlock.isStanding)
+    }
+  }
 
 	test("optimal solution for level 1") {
     new Level1 {
