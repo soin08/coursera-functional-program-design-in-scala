@@ -43,6 +43,8 @@ class BloxorzSuite extends FunSuite {
 
     val standingBlock = Block(Pos(1, 3), Pos(1, 3))
     val lyingBlock = Block(Pos(1, 3), Pos(1, 4))
+    val partiallyOnBlock = Block(Pos(1, 5), Pos(1, 6))
+    val offBlock = Block(Pos(1, 6), Pos(1, 7))
   }
 
 
@@ -76,6 +78,25 @@ class BloxorzSuite extends FunSuite {
   test("isStanding: when block lies down") {
     new Level1 {
       assert(!lyingBlock.isStanding)
+    }
+  }
+
+  test("isLegal: when block is entirely on terrain") {
+    new Level1 {
+      assert(standingBlock.isLegal)
+      assert(lyingBlock.isLegal)
+    }
+  }
+
+  test("isLegal: when block is partially on terrain") {
+    new Level1 {
+      assert(!partiallyOnBlock.isLegal)
+    }
+  }
+
+  test("isLegal: when block is off terrain") {
+    new Level1 {
+      assert(!offBlock.isLegal)
     }
   }
 
