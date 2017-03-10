@@ -49,6 +49,20 @@ class BloxorzSuite extends FunSuite {
     val lyingDestBlock = Block(Pos(4, 7), Pos(4, 8))
   }
 
+  trait LevelWithNoSolution extends SolutionChecker {
+    /* terrain for level with no solution*/
+
+    val level =
+      """----------
+        |-ST-------
+        |----------
+        |----------
+        |----------
+        |----------""".stripMargin
+
+    val optsolution = List()
+  }
+
 
 	test("terrain function level 1") {
     new Level1 {
@@ -164,4 +178,9 @@ class BloxorzSuite extends FunSuite {
     }
   }
 
+  test("optimal solution for level with no solution") {
+    new LevelWithNoSolution {
+      assert(solution == List())
+    }
+  }
 }
