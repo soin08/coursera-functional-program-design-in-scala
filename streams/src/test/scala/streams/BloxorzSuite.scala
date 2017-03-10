@@ -45,6 +45,8 @@ class BloxorzSuite extends FunSuite {
     val lyingBlock = Block(Pos(1, 3), Pos(1, 4))
     val partiallyOnBlock = Block(Pos(1, 5), Pos(1, 6))
     val offBlock = Block(Pos(1, 6), Pos(1, 7))
+    val standingDestBlock = Block(Pos(4, 7), Pos(4, 7))
+    val lyingDestBlock = Block(Pos(4, 7), Pos(4, 8))
   }
 
 
@@ -100,6 +102,18 @@ class BloxorzSuite extends FunSuite {
     }
   }
 
+  test("done: when block is standing on destination") {
+    new Level1 {
+      assert(done(standingDestBlock))
+    }
+  }
+
+  test("done: when block is lying on destination") {
+    new Level1 {
+      assert(!done(lyingDestBlock))
+    }
+  }
+
   test("startBlock") {
     new Level1 {
       assert(startBlock.isStanding)
@@ -107,6 +121,33 @@ class BloxorzSuite extends FunSuite {
       assert(startBlock.b1.col == 1)
       assert(startBlock.b2.row == 1)
       assert(startBlock.b2.col == 1)
+    }
+  }
+
+  test("neighborsWithHistory") {
+    new Level1 {
+      val neighborsWithHistorySet = neighborsWithHistory(Block(Pos(1,1),Pos(1,1)), List(Left,Up)).toSet
+      val expected = Set(
+        (Block(Pos(1,2),Pos(1,3)), List(Right,Left,Up)),
+        (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+      )
+      assert(neighborsWithHistorySet== expected)
+    }
+  }
+
+  test("newNeighborsOnly") {
+    new Level1 {
+      val newNeighborsOnlySet = newNeighborsOnly(
+        Set(
+          (Block(Pos(1,2),Pos(1,3)), List(Right,Left,Up)),
+          (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+        ).toStream,
+        Set(Block(Pos(1,2),Pos(1,3)), Block(Pos(1,1),Pos(1,1)))
+      ).toSet
+      val expected = Set(
+        (Block(Pos(2,1),Pos(3,1)), List(Down,Left,Up))
+      )
+      assert(newNeighborsOnlySet == expected)
     }
   }
 
