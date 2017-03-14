@@ -23,6 +23,11 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
     findMin(insert(m, h)) == m
   }
 
+  // Melding a heap and an empty heap produces the original heap
+  property("meld: a heap and an empty heap") = forAll { (h: H) =>
+    meld(h, empty) == h
+  }
+
   // If you insert any two elements into an empty heap, finding the
   // minimum of the resulting heap should get the smallest of the two
   // elements back.
@@ -59,4 +64,22 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap {
     l == l.sorted
   }
 
+  // Given a heap with two different elements, findMin should return
+  // a different result after deleteMin.
+  property("deleteMin: heap of two different selement") = forAll { (e1: A, e2: A) =>
+    (e1 != e2) ==> {
+      val h = insert(e1, insert(e2, empty))
+      findMin(h) != findMin(deleteMin(h))
+    }
+  }
+
+  // Given a heap with three elements, findMin should return the median
+  // after deleteMin
+  property("deleteMin: remove min element") = forAll { (e: Int) =>
+    val smallest = e - 3
+    val median = e - 2
+    val largest = e - 1
+    val h = insert(median, insert(smallest, insert(largest, empty)))
+    findMin(deleteMin(h)) == median
+  }
 }
